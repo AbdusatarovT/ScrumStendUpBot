@@ -27,7 +27,7 @@ class User(db.Model):
     tg_username = db.Column(String(65), unique=True, nullable=False)
     fullname = db.Column(String(80), unique=True)
     email = db.Column(String(65), unique=True, nullable=False)
-    password = db.Column(String(160), nullable=False)
+    password = db.Column(String(160))
     avatar = db.Column(String(255))
     tasks = db.relationship('Task', backref='task', lazy='dynamic')
 

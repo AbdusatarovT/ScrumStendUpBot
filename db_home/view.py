@@ -10,8 +10,7 @@ def home():
     '''
         {
             "tg_username": "tahir1",
-            "email": "tahir1@t.com",
-            "password": "tahir1"
+            "email": "tahir1@t.com"
         }
     '''
     user_data = request.get_json()
@@ -29,13 +28,13 @@ def home():
     if check_user_email:
         return jsonify(error='Почта занята')
     
-    if not password:
-        return jsonify(error='Пожалуйста введите пароль')
+    # if not password:
+    #     return jsonify(error='Пожалуйста введите пароль')
     
     create_new_user = User()
     create_new_user.tg_username = tg_username
     create_new_user.email = email
-    create_new_user.create_user_password_hash(password)
+    # create_new_user.create_user_password_hash(password)
 
     db.session.add(create_new_user)
     db.session.commit()
