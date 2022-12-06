@@ -56,18 +56,17 @@ def get_last_friends_task(message):
     """Команда для просмотра последниз задач у колег"""
     with app.app_context():
         try:
-            username = get_users_list()
-            for i in username:
-                if message.from_user.username != i[0]:
-                    tasks = get_friends_task(i[1])
-                    if tasks == 1:
-                        bot.send_message(message.chat.id,f'У {i[0]} на сегоня нет задач')
-                        break
-                    bot.send_message(message.chat.id,\
-                        f'Username: {i[0]}\nВчерашний таск: {tasks.yesterday_task}\nСегоднешний таск:\
-                             {tasks.today_task}\nПроблемы:{tasks.problem}')
+            users_and_tasks = get_friends_task()
+            for user, task in users_and_tasks:
+                if users_and_tasks == None:
+                    continue
+                elif user.tg_username == message.from_user.username:
+                    continue
+                bot.send_message(message.chat.id,\
+                    f'Username: {user.tg_username}\nВчерашний таск: {task.yesterday_task}\nСегоднешний таск: {task.today_task}\nПроблемы:{task.problem}')
         except Exception:
-            bot.send_message(message.chat.id,'Друг что то пошло не так, давай попробуем еще раз!😱')
+            bot.send_message(message.chat.id,'Ни кто ни чего ни делал!😱')
+
 
 
 @bot.message_handler(commands=['start'])
@@ -75,6 +74,7 @@ def cheak_yourself(message):
     """Метод для проверки пользователя"""
     with app.app_context():
         task_id = get_my_lust_task(message.from_user.id)
+        print(task_id)
         if task_id == None:
             user_name_id = get_user_db(message.from_user.username)
             if message.from_user.username == user_name_id[0]:
@@ -97,8 +97,8 @@ def cheak_yourself(message):
 def add_first_question(message, **kwargs):
     """Ответ на первый вопрос. Ответ сохранен в базе данных"""
     with app.app_context():
-        print(kwargs)
-        print(message.text)
+        # print(kwargs)
+        # print(message.text)
         try:
             task_id = kwargs.get('task_id', None)
             if task_id and task_id is not None:
@@ -113,8 +113,8 @@ def add_first_question(message, **kwargs):
 def add_second_question(message, **kwargs):
     """Ответ на второй вопрос."""
     with app.app_context():
-        print(kwargs)
-        print(message.text)
+        # print(kwargs)
+        # print(message.text)
         try:
             task_id = kwargs.get('task_id', None)
             if task_id and task_id is not None:
@@ -129,8 +129,8 @@ def add_second_question(message, **kwargs):
 def add_problems(message, **kwargs):
     """Ответ на третий вопрос."""
     with app.app_context():
-        print(kwargs)
-        print(message.text)
+        # print(kwargs)
+        # print(message.text)
         try:
             task_id = kwargs.get('task_id', None)
             if task_id and task_id is not None:
